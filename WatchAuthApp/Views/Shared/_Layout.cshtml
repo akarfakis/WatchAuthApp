@@ -1,0 +1,56 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Watch Auth App</title>
+    <script src="https://kit.fontawesome.com/3bc198b0bc.js"></script>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+        @Html.ActionLink("WatchApp", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+            {
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    @Html.ActionLink("Movies", "Index", "Movies", null, new { @class = "nav-link", id = "movies-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Actors", "Index", "Actors", null, new { @class = "nav-link", id = "first-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Directors", "Index", "Directors", null, new { @class = "nav-link", id = "second-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Categories", "Index", "Categories", null, new { @class = "nav-link", id = "third-link" })
+                </li>
+            </ul>
+            }
+
+        </div>
+        <div class="navbar-collapse collapse ml-auto">
+
+            @Html.Partial("_LoginPartial")
+        </div>
+    </nav>
+
+    <div class="container pt-4 body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

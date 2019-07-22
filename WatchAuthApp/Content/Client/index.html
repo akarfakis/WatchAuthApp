@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create Actors</title>
+</head>
+
+<body>
+    <form id="create-form">
+        <input type="text" id="Name" placeholder="Enter Name" minlength="5" required>
+        <input type="number" id="Age" placeholde="Enter Age" min="1" max="150" required>
+        <button type="submit">Create Actor!</button>
+    </form>
+
+    <div id="results">
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+
+            function deleteButtonClick(e) {
+
+                $.ajax({
+                    method: 'DELETE',
+                    url: '/Rest/Actor',
+                    data: { id: e.target.id },
+                    success: function (response) {
+                        if (response) {
+                            $(`#${e.target.id}`).parent().remove();
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+            }
+            function createActor(actor) {
+                $(`<p>${actor.Id}, ${actor.Name}, ${actor.Age}
+                   <button id="${actor.Id}" class="delete">Delete</button></p>`).appendTo("#results");
+            }
+
+
+
+            $.ajax({
+                method: 'GET',
+                url: '/Rest/Actors',
+                success: function (response) {
+                    console.log(response);
+                    for (let actor of response) {
+                        createActor(actor);
+                    }
+                    $('button.delete').on('click', deleteButtonClick);
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+            $('#create-form').on('submit',function(e){
+                e.preventDefault();
+
+                $.ajax({
+                    method: 'PUT',
+                    url: '/Rest/Actor',
+                    data: {
+                        Name: $('#Name').val(),
+                        Age: $('#Age').val()
+                    },
+                    success: function(response){
+                        console.log(response);
+                        createActor(response);
+                        $('#Name').val('');
+                        $('#Age').val('');
+                        $(`#${response.Id}`).on("click", deleteButtonClick);
+                    },
+                    error: function(response){
+                        console.log(response);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
