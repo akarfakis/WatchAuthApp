@@ -14,6 +14,7 @@ namespace WatchAuthApp.Controllers
     [Authorize]
     public class HomeController : Controller
     {
+        //Mitsako ton pairneis
         private AppManager db = new AppManager();
         public ActionResult Index(string search, string category, int sortBy = 0)
         {
